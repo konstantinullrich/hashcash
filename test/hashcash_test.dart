@@ -1,18 +1,20 @@
-import "dart:io";
+import 'dart:io';
 
 import 'package:hashcash/hashcash.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Hashcash Testgroup', () {
-    var stamp = Hashcash.mint('konstantinullrich12@gmail.com', stamp_seconds: true);
+    var stamp =
+        Hashcash.mint('konstantinullrich12@gmail.com', stamp_seconds: true);
 
     test('Wrong Resource', () {
       expect(Hashcash.check(stamp, resource: 'test'), false);
     });
 
     test('Valid Resource', () {
-      expect(Hashcash.check(stamp, resource: 'konstantinullrich12@gmail.com'), true);
+      expect(Hashcash.check(stamp, resource: 'konstantinullrich12@gmail.com'),
+          true);
     });
 
     test('Correct bits', () {
@@ -30,11 +32,13 @@ void main() {
     sleep(Duration(seconds: 10));
 
     test('Bad Expiration', () {
-      expect(Hashcash.check(stamp, check_expiration: Duration(seconds: 1)), false);
+      expect(
+          Hashcash.check(stamp, check_expiration: Duration(seconds: 1)), false);
     });
 
     test('More Valid Expiration', () {
-      expect(Hashcash.check(stamp, check_expiration: Duration(minutes: 1)), true);
+      expect(
+          Hashcash.check(stamp, check_expiration: Duration(minutes: 1)), true);
     });
   });
 }

@@ -170,27 +170,36 @@ class Hashcash {
   }
 
   static DateTime _currentDate(String date) {
-    var day = int.parse(date.substring(4, 6), onError: (e) => null);
-    var month = int.parse(date.substring(2, 4), onError: (e) => null);
-    var year = int.parse(date.substring(0, 2), onError: (e) => null);
-    if (day == null || month == null || year == null) {
+    var day;
+    var month;
+    var year;
+    var hour;
+    var minute;
+    var dt;
+
+    try {
+      day = int.parse(date.substring(4, 6));
+      month = int.parse(date.substring(2, 4));
+      year = int.parse(date.substring(0, 2));
+    } catch (e) {
       return null;
     }
-    int hour;
-    int minute;
+
     if (date.length >= 10) {
-      hour = int.parse(date.substring(6, 8), onError: (e) => null);
-      minute = int.parse(date.substring(8, 10), onError: (e) => null);
-      if (hour == null || minute == null) {
+      try {
+        hour = int.parse(date.substring(6, 8));
+        minute = int.parse(date.substring(8, 10));
+      } catch (e) {
         return null;
       }
     }
-    DateTime dt;
+
     if (hour != null && minute != null) {
       dt = DateTime(year + 2000, month, day, hour, minute);
     } else {
       dt = DateTime(year + 2000, month, day);
     }
+
     return dt;
   }
 }

@@ -5,7 +5,5 @@ void main() {
 
   var stamp = Hashcash.mint('konstantinullrich12@gmail.com');
 
-  print(
-      Hashcash.check(stamp, resource: 'konstantinullrich12@gmail.com')
-  );
+  print(Hashcash.check(stamp, resource: 'konstantinullrich12@gmail.com'));
 }
