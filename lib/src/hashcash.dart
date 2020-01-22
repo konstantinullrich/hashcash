@@ -101,13 +101,24 @@ class Hashcash {
       if (stamp_parts.length != 3) {
         return false;
       }
-      // var date = stamp_parts[0];
+
+      var date = stamp_parts[0];
       var res = stamp_parts[1];
+
+      var dt = _currentDate(date);
+      if (dt == null) {
+        return false;
+      }
+
       if (resource != null && resource != res) {
         return false;
       }
       if (check_expiration != null) {
-        // TODO: Implement expiration
+        var good_until = dt.add(check_expiration);
+        var now = DateTime.now();
+        if (now.isAfter(good_until)) {
+          return false;
+        }
       }
       var hex_digits = (bits / 4).floor();
       return crypto.sha1
@@ -121,8 +132,13 @@ class Hashcash {
       }
 
       var claim = int.parse(stamp_parts[0]);
-      // var date = stamp_parts[1];
+      var date = stamp_parts[1];
       var res = stamp_parts[2];
+
+      var dt = _currentDate(date);
+      if (dt == null) {
+        return false;
+      }
 
       if (resource != null && resource != res) {
         return false;
@@ -131,7 +147,11 @@ class Hashcash {
         return false;
       }
       if (check_expiration != null) {
-        // TODO: Implement expiration
+        var good_until = dt.add(check_expiration);
+        var now = DateTime.now();
+        if (now.isAfter(good_until)) {
+          return false;
+        }
       }
       var hex_digits = (claim / 4).floor();
       return crypto.sha1
@@ -148,5 +168,30 @@ class Hashcash {
           .toString()
           .startsWith('0' * hex_digits);
     }
+  }
+
+  static DateTime _currentDate(String date) {
+    var day = int.parse(date.substring(4, 6), onError: (e) => null);
+    var month = int.parse(date.substring(2, 4), onError: (e) => null);
+    var year = int.parse(date.substring(0, 2), onError: (e) => null);
+    if (day == null || month == null || year == null) {
+      return null;
+    }
+    int hour;
+    int minute;
+    if (date.length >= 10) {
+      hour = int.parse(date.substring(6, 8), onError: (e) => null);
+      minute = int.parse(date.substring(8, 10), onError: (e) => null);
+      if (hour == null || minute == null) {
+        return null;
+      }
+    }
+    DateTime dt;
+    if (hour != null && minute != null) {
+      dt = DateTime(year + 2000, month, day, hour, minute);
+    } else {
+      dt = DateTime(year + 2000, month, day);
+    }
+    return dt;
   }
 }
