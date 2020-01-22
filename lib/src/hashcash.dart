@@ -98,7 +98,7 @@ class Hashcash {
     }
     if (stamp.startsWith('0:')) {
       var stamp_parts = stamp.substring(2).split(':');
-      if (stamp_parts.length < 3) {
+      if (stamp_parts.length != 3) {
         return false;
       }
       // var date = stamp_parts[0];
@@ -110,15 +110,43 @@ class Hashcash {
         // TODO: Implement expiration
       }
       var hex_digits = (bits / 4).floor();
-      return crypto.sha1.convert(stamp.codeUnits).toString().startsWith('0' * hex_digits);
+      return crypto.sha1
+          .convert(stamp.codeUnits)
+          .toString()
+          .startsWith('0' * hex_digits);
     } else if (stamp.startsWith('1:')) {
-      // TODO: Implement Hashcash Protocol V1 Checking
+      var stamp_parts = stamp.substring(2).split(':');
+      if (stamp_parts.length != 6) {
+        return false;
+      }
+
+      var claim = int.parse(stamp_parts[0]);
+      // var date = stamp_parts[1];
+      var res = stamp_parts[2];
+
+      if (resource != null && resource != res) {
+        return false;
+      }
+      if (bits != null && bits > claim) {
+        return false;
+      }
+      if (check_expiration != null) {
+        // TODO: Implement expiration
+      }
+      var hex_digits = (claim / 4).floor();
+      return crypto.sha1
+          .convert(stamp.codeUnits)
+          .toString()
+          .startsWith('0' * hex_digits);
     } else {
       if (resource != null && !stamp.contains(resource)) {
         return false;
       }
       var hex_digits = (bits / 4).floor();
-      return crypto.sha1.convert(stamp.codeUnits).toString().startsWith('0' * hex_digits);
+      return crypto.sha1
+          .convert(stamp.codeUnits)
+          .toString()
+          .startsWith('0' * hex_digits);
     }
   }
 }
