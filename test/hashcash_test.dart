@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:hashcash/hashcash.dart';
+import 'package:hashcash_dart/hashcash_dart.dart';
 import 'package:test/test.dart';
 
 void main() {

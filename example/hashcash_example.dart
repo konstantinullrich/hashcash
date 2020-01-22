@@ -1,4 +1,4 @@
-import 'package:hashcash/hashcash.dart';
+import 'package:hashcash_dart/hashcash_dart.dart';
 
 void main() {
   print('Hashcash Protocol version: ${Hashcash.version}');

@@ -1,3 +1,3 @@
-library hashcash;
+library hashcash_dart;
 
 export 'src/hashcash.dart';

@@ -24,7 +24,7 @@ property than the collision resistance property.
 A simple example:
 
 ```dart
-import 'package:hashcash/hashcash.dart';
+import 'package:hashcash/hashcash_dart.dart';
 
 main() {
   var stamp = Hashcash.mint('konstantinullrich12@gmail.com');
