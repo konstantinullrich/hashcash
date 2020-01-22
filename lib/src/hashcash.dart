@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart' as crypto;
@@ -6,7 +5,7 @@ import 'package:crypto/crypto.dart' as crypto;
 /// Checks if you are awesome. Spoiler: you are.
 class Hashcash {
   static final int _version = 1;
-  static final String _chars =
+  static final String _ascii_chars =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/=';
 
   /// Version of the implemented hashcash protocol
@@ -33,13 +32,12 @@ class Hashcash {
   ///    even though the spec also allows hours/minutes without seconds.
   static String mint(String resource,
       {int bits = 20,
-        DateTime now,
-        String extension = '',
-        int saltchars = 8,
-        bool stamp_seconds = false}) {
-
-    var iso_now = now == null
-      ? DateTime.now().toIso8601String() : now.toIso8601String();
+      DateTime now,
+      String extension = '',
+      int saltchars = 8,
+      bool stamp_seconds = false}) {
+    var iso_now =
+        now == null ? DateTime.now().toIso8601String() : now.toIso8601String();
     iso_now = iso_now.replaceAll('-', '').replaceAll(':', '');
     var date_time = iso_now.split('T');
     var ts = date_time[0].substring(2, date_time.length);
@@ -66,7 +64,7 @@ class Hashcash {
     var random = Random();
     var result = '';
     for (var i = 0; i < length; i++) {
-      result += _chars[random.nextInt(_chars.length)];
+      result += _ascii_chars[random.nextInt(_ascii_chars.length)];
     }
     return result;
   }
@@ -84,12 +82,43 @@ class Hashcash {
     var zeros = '0' * hex_digets;
     while (true) {
       var digest = crypto.sha1
-          .convert(utf8.encode(challenge + ':' + counter.toRadixString(16)))
+          .convert((challenge + ':' + counter.toRadixString(16)).codeUnits)
           .toString();
       if (digest.startsWith(zeros)) {
         return counter.toRadixString(16);
       }
       counter++;
+    }
+  }
+
+  static bool check(String stamp,
+      {String resource, int bits = 20, Duration check_expiration}) {
+    if (stamp == null || stamp.isEmpty) {
+      return false;
+    }
+    if (stamp.startsWith('0:')) {
+      var stamp_parts = stamp.substring(2).split(':');
+      if (stamp_parts.length < 3) {
+        return false;
+      }
+      // var date = stamp_parts[0];
+      var res = stamp_parts[1];
+      if (resource != null && resource != res) {
+        return false;
+      }
+      if (check_expiration != null) {
+        // TODO: Implement expiration
+      }
+      var hex_digits = (bits / 4).floor();
+      return crypto.sha1.convert(stamp.codeUnits).toString().startsWith('0' * hex_digits);
+    } else if (stamp.startsWith('1:')) {
+      // TODO: Implement Hashcash Protocol V1 Checking
+    } else {
+      if (resource != null && !stamp.contains(resource)) {
+        return false;
+      }
+      var hex_digits = (bits / 4).floor();
+      return crypto.sha1.convert(stamp.codeUnits).toString().startsWith('0' * hex_digits);
     }
   }
 }
