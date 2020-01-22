@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart' as crypto;
 
-/// Checks if you are awesome. Spoiler: you are.
 class Hashcash {
   static final int _version = 1;
   static final String _ascii_chars =
