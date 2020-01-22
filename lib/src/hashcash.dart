@@ -4,18 +4,15 @@ import 'dart:math';
 import 'package:crypto/crypto.dart' as crypto;
 
 /// Checks if you are awesome. Spoiler: you are.
-class Minter {
-  final int _version = 1;
-  int _tries = 0;
-  final String _chars =
+class Hashcash {
+  static final int _version = 1;
+  static final String _chars =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/=';
 
   /// Version of the implemented hashcash protocol
   /// Warning: This version has nothing to do with the version fo the Package
   /// stated in the pubspec.yaml file
-  int get version => _version;
-
-  int get tries => _tries;
+  static int get version => _version;
 
   /// Mint a new hashcash stamp for 'resource' with 'bits' of collision
   ///
@@ -34,18 +31,26 @@ class Minter {
   ///    'stamp_seconds' lets you add the option time elements to the datestamp.
   ///    If you want more than just day, you get all the way down to seconds,
   ///    even though the spec also allows hours/minutes without seconds.
-  String mint(String resource,
+  static String mint(String resource,
       {int bits = 20,
-      var now,
-      String extension = '',
-      int saltchars = 8,
-      bool stamp_seconds = false}) {
-    var timestamp = '';
+        DateTime now,
+        String extension = '',
+        int saltchars = 8,
+        bool stamp_seconds = false}) {
+
+    var iso_now = now == null
+      ? DateTime.now().toIso8601String() : now.toIso8601String();
+    iso_now = iso_now.replaceAll('-', '').replaceAll(':', '');
+    var date_time = iso_now.split('T');
+    var ts = date_time[0].substring(2, date_time.length);
+    if (stamp_seconds) {
+      ts = '$ts${date_time[1].substring(0, 6)}';
+    }
 
     var challenge = <String>[
       version.toString(),
       bits.toString(),
-      timestamp,
+      ts,
       resource,
       extension,
       _salt(saltchars)
@@ -57,7 +62,7 @@ class Minter {
   }
 
   /// Return a random string of specified length
-  String _salt(int length) {
+  static String _salt(int length) {
     var random = Random();
     var result = '';
     for (var i = 0; i < length; i++) {
@@ -73,7 +78,7 @@ class Minter {
   /// and returns only a suffix that produces the requested SHA leading zeros.
   ///
   /// NOTE: Number of requested bits is rounded up to the nearest multiple of 4
-  String _mint(String challenge, int bits) {
+  static String _mint(String challenge, int bits) {
     var counter = 0;
     var hex_digets = (bits / 4).ceil();
     var zeros = '0' * hex_digets;
@@ -82,7 +87,6 @@ class Minter {
           .convert(utf8.encode(challenge + ':' + counter.toRadixString(16)))
           .toString();
       if (digest.startsWith(zeros)) {
-        _tries = counter;
         return counter.toRadixString(16);
       }
       counter++;

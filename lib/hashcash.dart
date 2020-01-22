@@ -1,3 +1,3 @@
 library hashcash;
 
-export 'src/minter.dart';
+export 'src/hashcash.dart';

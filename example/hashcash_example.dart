@@ -1,8 +1,7 @@
 import 'package:hashcash/hashcash.dart';
 
 void main() {
-  var minter = Minter();
-  print('Hashcash Protocol version: ${minter.version}');
-  print(minter.mint('Konsti'));
+  print('Hashcash Protocol version: ${Hashcash.version}');
+  print(Hashcash.mint('Konsti'));
 
 }
