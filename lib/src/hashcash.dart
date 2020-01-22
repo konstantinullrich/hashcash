@@ -40,7 +40,7 @@ class Hashcash {
         now == null ? DateTime.now().toIso8601String() : now.toIso8601String();
     iso_now = iso_now.replaceAll('-', '').replaceAll(':', '');
     var date_time = iso_now.split('T');
-    var ts = date_time[0].substring(2, date_time.length);
+    var ts = date_time[0].substring(2, date_time[0].length);
     if (stamp_seconds) {
       ts = '$ts${date_time[1].substring(0, 6)}';
     }
@@ -143,7 +143,7 @@ class Hashcash {
       if (resource != null && resource != res) {
         return false;
       }
-      if (bits != null && bits > claim) {
+      if (bits != null && bits != claim) {
         return false;
       }
       if (check_expiration != null) {
