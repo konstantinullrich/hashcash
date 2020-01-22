@@ -1,6 +1,6 @@
 name: hashcash_dart
-description: A hashcash implementation for Dart
-version: 0.0.1
+description: A hashcash proof of work implementation for Dart and Flutter
+version: 0.1.0
 homepage: https://github.com/konstantinullrich
 repository: https://github.com/konstantinullrich/hashcash
 issue_tracker: https://github.com/konstantinullrich/hashcash/issues
