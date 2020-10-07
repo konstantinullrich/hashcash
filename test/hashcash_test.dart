@@ -6,14 +6,14 @@ import 'package:test/test.dart';
 void main() {
   group('Hashcash Testgroup', () {
     var stamp =
-        Hashcash.mint('konstantinullrich12@gmail.com', stamp_seconds: true);
+        Hashcash.mint('dev@konstantinullrich.de', stamp_seconds: true);
 
     test('Wrong Resource', () {
       expect(Hashcash.check(stamp, resource: 'test'), false);
     });
 
     test('Valid Resource', () {
-      expect(Hashcash.check(stamp, resource: 'konstantinullrich12@gmail.com'),
+      expect(Hashcash.check(stamp, resource: 'dev@konstantinullrich.de'),
           true);
     });
 
