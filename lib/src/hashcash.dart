@@ -21,7 +21,7 @@ class Hashcash {
   ///    FWIW, urllib.urlencode(dct).replace('&',';') comes close to the
   ///    hashcash extension format.
   ///
-  ///    'saltchars' specifies the length of the salt used; this version defaults
+  ///    'saltChars' specifies the length of the salt used; this version defaults
   ///    8 chars, rather than the C version's 16 chars.  This still provides about
   ///    17 million salts per resource, per timestamp, before birthday paradox
   ///    collisions occur.  Really paranoid users can use a larger salt though.
@@ -31,9 +31,9 @@ class Hashcash {
   ///    even though the spec also allows hours/minutes without seconds.
   static String mint(String resource,
       {int bits = 20,
-      DateTime now,
+      DateTime? now,
       String extension = '',
-      int saltchars = 8,
+      int saltChars = 8,
       bool stamp_seconds = false}) {
     var iso_now =
         now == null ? DateTime.now().toIso8601String() : now.toIso8601String();
@@ -50,7 +50,7 @@ class Hashcash {
       ts,
       resource,
       extension,
-      _salt(saltchars)
+      _salt(saltChars)
     ];
 
     var mint = _mint(challenge.join(':'), bits);
@@ -77,8 +77,8 @@ class Hashcash {
   /// NOTE: Number of requested bits is rounded up to the nearest multiple of 4
   static String _mint(String challenge, int bits) {
     var counter = 0;
-    var hex_digets = (bits / 4).ceil();
-    var zeros = '0' * hex_digets;
+    var hex_digits = (bits / 4).ceil();
+    var zeros = '0' * hex_digits;
     while (true) {
       var digest = crypto.sha1
           .convert((challenge + ':' + counter.toRadixString(16)).codeUnits)
@@ -91,8 +91,8 @@ class Hashcash {
   }
 
   static bool check(String stamp,
-      {String resource, int bits = 20, Duration check_expiration}) {
-    if (stamp == null || stamp.isEmpty) {
+      {String? resource, int bits = 20, Duration? check_expiration}) {
+    if (stamp.isEmpty) {
       return false;
     }
     if (stamp.startsWith('0:')) {
@@ -142,7 +142,7 @@ class Hashcash {
       if (resource != null && resource != res) {
         return false;
       }
-      if (bits != null && bits != claim) {
+      if (bits != claim) {
         return false;
       }
       if (check_expiration != null) {
@@ -169,7 +169,7 @@ class Hashcash {
     }
   }
 
-  static DateTime _currentDate(String date) {
+  static DateTime? _currentDate(String date) {
     var day;
     var month;
     var year;
