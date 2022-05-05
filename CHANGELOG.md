@@ -1,3 +1,6 @@
+## 1.0.1
+- Finalize the nullsafety release
+
 ## 1.0.0-nullsafety
 - Update dependencies
 
