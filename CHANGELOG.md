@@ -1,3 +1,6 @@
+## 1.0.0-nullsafety
+- Update dependencies
+
 ## 0.1.1
 - Update dependencies
 - Update tests
