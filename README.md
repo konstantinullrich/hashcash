@@ -27,8 +27,8 @@ A simple example:
 import 'package:hashcash/hashcash_dart.dart';
 
 main() {
-  var stamp = Hashcash.mint('konstantinullrich12@gmail.com');
-  var checked = Hashcash.check(stamp, resource: 'konstantinullrich12@gmail.com');
+  var stamp = Hashcash.mint('dev@konstantinullrich.de');
+  var checked = Hashcash.check(stamp, resource: 'dev@konstantinullrich.de');
 }
 ```
 
