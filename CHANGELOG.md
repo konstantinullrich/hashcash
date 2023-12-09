@@ -1,3 +1,6 @@
+## 1.1.0
+- Nullsafety and Dart 3 release
+
 ## 1.0.1
 - Finalize the nullsafety release
 
