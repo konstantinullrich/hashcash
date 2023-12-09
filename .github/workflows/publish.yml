@@ -5,17 +5,16 @@ on:
     types:
       - published
 
+# Publish using custom workflow
 jobs:
-  publishing:
-
+  publish:
+    permissions:
+      id-token: write # Required for authentication using OIDC
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Publish package
-        uses: k-paxian/dart-package-publisher@v1.2
-        with:
-          accessToken: ${{ secrets.GOOGLE_OAUTH_ACCESS_TOKEN }}
-          refreshToken: ${{ secrets.GOOGLE_OAUTH_REFRESH_TOKEN }}
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - name: Install dependencies
+        run: dart pub get
+      - name: Publish
+        run: dart pub publish --force
