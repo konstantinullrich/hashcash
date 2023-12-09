@@ -5,16 +5,14 @@ import 'package:test/test.dart';
 
 void main() {
   group('Hashcash Testgroup', () {
-    var stamp =
-        Hashcash.mint('dev@konstantinullrich.de', stamp_seconds: true);
+    final stamp = Hashcash.mint('dev@konstantinullrich.de', stampSeconds: true);
 
     test('Wrong Resource', () {
       expect(Hashcash.check(stamp, resource: 'test'), false);
     });
 
     test('Valid Resource', () {
-      expect(Hashcash.check(stamp, resource: 'dev@konstantinullrich.de'),
-          true);
+      expect(Hashcash.check(stamp, resource: 'dev@konstantinullrich.de'), true);
     });
 
     test('Correct bits', () {
@@ -26,19 +24,19 @@ void main() {
     });
 
     test('Valid Expiration', () {
-      expect(Hashcash.check(stamp, check_expiration: Duration(hours: 1)), true);
+      expect(Hashcash.check(stamp, checkExpiration: Duration(hours: 1)), true);
     });
 
     sleep(Duration(seconds: 10));
 
     test('Bad Expiration', () {
       expect(
-          Hashcash.check(stamp, check_expiration: Duration(seconds: 1)), false);
+          Hashcash.check(stamp, checkExpiration: Duration(seconds: 1)), false);
     });
 
     test('More Valid Expiration', () {
       expect(
-          Hashcash.check(stamp, check_expiration: Duration(minutes: 1)), true);
+          Hashcash.check(stamp, checkExpiration: Duration(minutes: 1)), true);
     });
   });
 }

@@ -38,5 +38,5 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 
 [cypherspace]: http://www.cypherspace.org/adam/
 [papers]: http://hashcash.org/papers/
-[bitcoin]: http://bitcoin.it/
+[bitcoin]: https://bitcoin.it/
 [tracker]: https://github.com/konstantinullrich/hashcash/issues
